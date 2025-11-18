@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>People Tracker</title>
+  <title>Kinkonnect – Classmates Map</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f4f5fb;
-      color: #111827;
+      background: #0f172a;
+      color: #e5e7eb;
     }
 
     body {
@@ -17,39 +17,64 @@
     }
 
     .app {
-      max-width: 960px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 1.5rem;
+      padding: 1.5rem 1.25rem 2.5rem;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .title {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
     }
 
     h1 {
-      margin: 0 0 0.25rem;
       font-size: 1.8rem;
+      margin: 0;
+      color: #e5e7eb;
     }
 
     .subtitle {
-      color: #6b7280;
       font-size: 0.9rem;
-      margin-bottom: 1.5rem;
+      color: #9ca3af;
+    }
+
+    .pill {
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(34,197,94,0.12);
+      color: #22c55e;
+      font-size: 0.75rem;
+      border: 1px solid rgba(34,197,94,0.4);
     }
 
     .layout {
       display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.5fr);
       gap: 1.25rem;
     }
 
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       .layout {
         grid-template-columns: 1fr;
       }
     }
 
     .card {
-      background: #ffffff;
-      border-radius: 0.75rem;
+      background: #020617;
+      border-radius: 0.9rem;
       padding: 1rem 1.1rem;
-      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+      box-shadow: 0 18px 35px rgba(15,23,42,0.75);
+      border: 1px solid #1f2937;
       box-sizing: border-box;
     }
 
@@ -57,34 +82,43 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 0.5rem;
       margin-bottom: 0.75rem;
+      gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
     .card-title {
       font-size: 1rem;
       font-weight: 600;
+      color: #e5e7eb;
     }
 
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
+    .card-sub {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 0.18rem;
+      color: #d1d5db;
     }
 
     input[type="text"],
-    input[type="date"],
+    input[type="tel"],
     select,
     textarea {
       width: 100%;
       box-sizing: border-box;
-      padding: 0.4rem 0.5rem;
-      border: 1px solid #d1d5db;
-      border-radius: 0.5rem;
+      padding: 0.45rem 0.55rem;
+      border-radius: 0.55rem;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
       font-size: 0.85rem;
       outline: none;
-      transition: border 0.15s, box-shadow 0.15s;
+      transition: border 0.15s, box-shadow 0.15s, background 0.15s;
     }
 
     input:focus,
@@ -92,18 +126,12 @@
     textarea:focus {
       border-color: #6366f1;
       box-shadow: 0 0 0 1px #6366f1;
+      background: #020617;
     }
 
     textarea {
       resize: vertical;
       min-height: 60px;
-    }
-
-    label {
-      display: block;
-      font-size: 0.8rem;
-      margin-bottom: 0.15rem;
-      color: #374151;
     }
 
     .field-row {
@@ -117,253 +145,338 @@
       align-items: center;
       justify-content: center;
       gap: 0.3rem;
-      padding: 0.45rem 0.9rem;
+      padding: 0.45rem 0.95rem;
       border-radius: 999px;
       font-size: 0.85rem;
       border: none;
       cursor: pointer;
-      background: #4f46e5;
-      color: #ffffff;
+      background: #6366f1;
+      color: #e5e7eb;
       font-weight: 500;
       transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+      white-space: nowrap;
     }
 
     .btn:hover {
-      background: #4338ca;
-      box-shadow: 0 8px 16px rgba(79, 70, 229, 0.25);
+      background: #4f46e5;
+      box-shadow: 0 12px 25px rgba(79,70,229,0.6);
       transform: translateY(-1px);
     }
 
     .btn.secondary {
-      background: #e5e7eb;
-      color: #111827;
+      background: #111827;
+      border: 1px solid #374151;
       box-shadow: none;
     }
 
     .btn.secondary:hover {
-      background: #d1d5db;
+      background: #020617;
       box-shadow: none;
       transform: none;
     }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.15rem 0.4rem;
-      border-radius: 999px;
-      font-size: 0.7rem;
-      background: #eef2ff;
-      color: #4338ca;
-      margin-left: 0.35rem;
-    }
-
-    .list-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .list-meta {
+    .btn.small {
+      padding: 0.25rem 0.6rem;
       font-size: 0.8rem;
-      color: #6b7280;
     }
 
-    .people-list {
+    .controls-top {
       display: flex;
-      flex-direction: column;
       gap: 0.5rem;
-      max-height: 60vh;
-      overflow: auto;
-      padding-right: 0.25rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
     }
 
-    .person {
-      display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr) minmax(0, 1.4fr);
-      gap: 0.6rem;
-      align-items: flex-start;
-      padding: 0.55rem 0.65rem;
-      border-radius: 0.6rem;
-      background: #f9fafb;
-      border: 1px solid transparent;
-      font-size: 0.83rem;
-    }
-
-    .person:nth-child(odd) {
-      background: #f3f4ff;
-    }
-
-    .person:hover {
-      border-color: #c7d2fe;
-    }
-
-    .person-name {
-      font-weight: 600;
-      margin-bottom: 0.1rem;
-    }
-
-    .person-relation {
-      font-size: 0.78rem;
-      color: #6b7280;
-    }
-
-    .person-location {
-      font-size: 0.78rem;
-      color: #4b5563;
-      margin-bottom: 0.15rem;
-    }
-
-    .person-notes {
-      font-size: 0.78rem;
-      color: #4b5563;
+    .search {
+      flex: 1;
+      min-width: 140px;
     }
 
     .badge {
-      display: inline-flex;
-      padding: 0.12rem 0.35rem;
-      border-radius: 999px;
-      font-size: 0.7rem;
-      background: #fee2e2;
-      color: #b91c1c;
-      margin-right: 0.25rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
     }
 
-    .badge.ok {
-      background: #dcfce7;
-      color: #166534;
+    .list {
+      max-height: 340px;
+      overflow: auto;
+      padding-right: 0.2rem;
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .classmate {
+      padding: 0.5rem 0.55rem;
+      border-radius: 0.6rem;
+      background: #020617;
+      border: 1px solid #1f2937;
+      font-size: 0.82rem;
+    }
+
+    .classmate-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.4rem;
+      align-items: center;
+      margin-bottom: 0.1rem;
+    }
+
+    .classmate-name {
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .classmate-town {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .classmate-phone {
+      font-size: 0.8rem;
+      color: #a5b4fc;
+    }
+
+    .classmate-detail {
+      font-size: 0.78rem;
+      color: #cbd5f5;
+      margin-top: 0.15rem;
     }
 
     .tag {
       display: inline-flex;
-      padding: 0.12rem 0.35rem;
+      padding: 0.1rem 0.35rem;
       border-radius: 999px;
-      font-size: 0.7rem;
-      background: #e5e7eb;
-      color: #374151;
-      margin: 0.1rem 0.15rem 0 0;
+      background: #111827;
+      font-size: 0.72rem;
+      color: #9ca3af;
+      border: 1px solid #1f2937;
+      margin-top: 0.2rem;
     }
 
-    .empty-state {
-      font-size: 0.85rem;
+    .empty {
+      font-size: 0.82rem;
       color: #6b7280;
       text-align: center;
-      padding: 1rem 0.5rem;
+      padding: 0.8rem 0.4rem;
     }
 
-    .small {
-      font-size: 0.75rem;
-      color: #9ca3af;
-      margin-top: 0.5rem;
+    /* Map tiles */
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.55rem;
+      margin-top: 0.75rem;
     }
 
-    .danger {
-      color: #b91c1c;
+    .town-tile {
+      border-radius: 0.7rem;
+      padding: 0.55rem 0.6rem;
+      background: #020617;
+      border: 1px solid #1f2937;
+      font-size: 0.8rem;
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 0.12rem;
+      transition: transform 0.12s, box-shadow 0.12s, border 0.12s, background 0.12s;
+    }
+
+    .town-tile span {
+      pointer-events: none;
+    }
+
+    .town-name {
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .town-count {
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
+    .town-tile.has-people {
+      background: linear-gradient(135deg, #022c22, #064e3b);
+      border-color: #22c55e;
+      box-shadow: 0 10px 25px rgba(34,197,94,0.5);
+    }
+
+    .town-tile.selected {
+      outline: 1px solid #e5e7eb;
+    }
+
+    .town-tile.has-people .town-count {
+      color: #bbf7d0;
+    }
+
+    .map-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .map-status {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .danger-link {
       font-size: 0.75rem;
+      color: #fca5a5;
       text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .footer-note {
+      margin-top: 0.55rem;
+      font-size: 0.75rem;
+      color: #6b7280;
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <h1>People Tracker</h1>
-    <div class="subtitle">
-      Keep track of family and friends, when you last spoke, and what matters to them.
-    </div>
-
-    <div class="layout">
-      <!-- Left: list -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Your people</div>
-        </div>
-
-        <div class="controls">
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Search by name, relation, city, tags..."
-          />
-          <select id="sortSelect">
-            <option value="name">Sort: Name (A–Z)</option>
-            <option value="lastContactRecent">Sort: Last contact (recent first)</option>
-            <option value="lastContactOld">Sort: Last contact (oldest first)</option>
-          </select>
-        </div>
-
-        <div class="list-header">
-          <div class="list-meta" id="countMeta">0 people</div>
-          <span class="small">Stored only in this browser using localStorage</span>
-        </div>
-
-        <div id="peopleList" class="people-list"></div>
-        <div id="emptyState" class="empty-state" style="display:none;">
-          No people yet. Add someone on the right to get started.
-        </div>
-
-        <div class="small">
-          <span class="danger" id="resetDataBtn">Clear all data</span>
+    <header>
+      <div class="title">
+        <h1>Kinkonnect</h1>
+        <div class="subtitle">
+          See where your classmates are across Kenya 🌍 – town by town.
         </div>
       </div>
+      <div>
+        <span class="pill">High school class of 100</span>
+      </div>
+    </header>
 
-      <!-- Right: form -->
-      <div class="card">
+    <div class="layout">
+      <!-- LEFT: form + list -->
+      <section class="card">
         <div class="card-header">
-          <div class="card-title">Add / update person</div>
+          <div>
+            <div class="card-title">Add / edit classmate</div>
+            <div class="card-sub">Store name, phone, town and specific place.</div>
+          </div>
+          <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+            <input type="file" id="importFile" accept="application/json" style="display:none;" />
+            <button id="importBtn" class="btn small secondary" type="button">
+              Import
+            </button>
+            <button id="exportBtn" class="btn small secondary" type="button">
+              Export
+            </button>
+            <button id="demoBtn" class="btn small secondary" type="button">
+              Demo data
+            </button>
+          </div>
         </div>
 
-        <form id="personForm">
+        <form id="classmateForm">
           <input type="hidden" id="editIndex" />
 
           <div>
-            <label for="name">Name *</label>
-            <input id="name" type="text" required />
+            <label for="name">Full name *</label>
+            <input id="name" type="text" required placeholder="e.g. Aisha Mwangi" />
           </div>
 
-          <div class="field-row" style="margin-top:0.5rem;">
+          <div class="field-row" style="margin-top:0.55rem;">
             <div>
-              <label for="relation">How you know them</label>
-              <input id="relation" type="text" placeholder="Cousin, friend, colleague..." />
+              <label for="phone">Phone number *</label>
+              <input id="phone" type="tel" required placeholder="e.g. 07xx xxx xxx" />
             </div>
             <div>
-              <label for="location">Where they are</label>
-              <input id="location" type="text" placeholder="City, Country" />
-            </div>
-          </div>
-
-          <div class="field-row" style="margin-top:0.5rem;">
-            <div>
-              <label for="lastContact">Last time you spoke</label>
-              <input id="lastContact" type="date" />
-            </div>
-            <div>
-              <label for="tags">Tags</label>
-              <input id="tags" type="text" placeholder="family, work, close..." />
+              <label for="town">Town *</label>
+              <select id="town" required></select>
             </div>
           </div>
 
-          <div style="margin-top:0.5rem;">
-            <label for="notes">Notes</label>
-            <textarea id="notes" placeholder="Important details, follow-ups, birthdays, etc."></textarea>
+          <div style="margin-top:0.55rem;">
+            <label for="place">Specific place in town</label>
+            <input id="place" type="text" placeholder="Estate, school, street..." />
           </div>
 
-          <div style="margin-top:0.8rem; display:flex; gap:0.5rem;">
-            <button type="submit" class="btn" id="saveBtn">Save person</button>
+          <div style="margin-top:0.55rem;">
+            <label for="notes">Notes (optional)</label>
+            <textarea id="notes" placeholder="Anything extra – uni, job, etc."></textarea>
+          </div>
+
+          <div style="margin-top:0.9rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button type="submit" class="btn" id="saveBtn">Save classmate</button>
             <button type="button" class="btn secondary" id="cancelEditBtn" style="display:none;">
               Cancel edit
             </button>
           </div>
         </form>
-      </div>
+
+        <div style="margin-top:1rem;">
+          <div class="controls-top">
+            <div class="search">
+              <input type="text" id="searchInput" placeholder="Search by name, town, phone..." />
+            </div>
+            <div class="badge" id="summaryBadge">0 classmates stored</div>
+          </div>
+
+          <div id="classmateList" class="list"></div>
+          <div id="emptyList" class="empty" style="display:none;">
+            No classmates yet. Add a few above or load demo data.
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: "map" of towns -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Kenya town map</div>
+            <div class="card-sub">
+              Tiles turn <span style="color:#22c55e;">green</span> where your classmates are.
+            </div>
+          </div>
+          <div class="badge">
+            Click a town to see names &amp; phones.
+          </div>
+        </div>
+
+        <div class="map-header">
+          <div class="map-status" id="mapStatus">
+            No town selected.
+          </div>
+          <div>
+            <span class="danger-link" id="clearAllBtn">Clear all saved data</span>
+          </div>
+        </div>
+
+        <div id="mapGrid" class="map-grid"></div>
+
+        <div class="footer-note">
+          Data is stored only in <strong>your browser</strong> (localStorage).  
+          Use <strong>Export</strong> to download a backup file, and <strong>Import</strong> to load it later.
+        </div>
+      </section>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = "people-tracker-list-v1";
+    // ---------- CONFIG ----------
+    const STORAGE_KEY = "kinkonnect-classmates-v1";
 
-    function loadPeople() {
+    // A list of Kenyan towns – you can edit this
+    const TOWNS = [
+      "Nairobi", "Mombasa", "Kisumu", "Nakuru", "Eldoret", "Thika", "Nyeri",
+      "Meru", "Embu", "Kericho", "Naivasha", "Kitale", "Kakamega", "Bungoma",
+      "Machakos", "Kajiado", "Narok", "Lamu", "Garissa", "Wajir", "Isiolo",
+      "Nanyuki", "Voi", "Malindi", "Kilifi", "Homa Bay", "Migori", "Kisii",
+      "Busia", "Siaya", "Marsabit", "Lodwar", "Hola", "Mumias", "Kitui",
+      "Makueni", "Murang'a", "Kiambu", "Kerugoya", "Limuru", "Athi River",
+      "Ruiru", "Kangemi", "Kawangware", "Karatina", "Bomet", "Litein",
+      "Chuka", "Kapsabet"
+    ];
+
+    // ---------- STORAGE HELPERS ----------
+    function loadClassmates() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return [];
@@ -374,247 +487,383 @@
       }
     }
 
-    function savePeople(people) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(people));
+    function saveClassmates(list) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
     }
 
-    function daysSince(dateStr) {
-      if (!dateStr) return null;
-      const d = new Date(dateStr);
-      if (Number.isNaN(d.getTime())) return null;
-      const now = new Date();
-      const diffMs = now - d;
-      return Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    }
+    // ---------- STATE ----------
+    let classmates = loadClassmates();
+    let selectedTown = null;
 
-    let people = loadPeople();
-
-    const peopleListEl = document.getElementById("peopleList");
-    const emptyStateEl = document.getElementById("emptyState");
-    const countMetaEl = document.getElementById("countMeta");
-    const searchInput = document.getElementById("searchInput");
-    const sortSelect = document.getElementById("sortSelect");
-    const resetDataBtn = document.getElementById("resetDataBtn");
-
-    const form = document.getElementById("personForm");
+    // ---------- ELEMENTS ----------
+    const townSelect = document.getElementById("town");
+    const classmateForm = document.getElementById("classmateForm");
     const editIndexInput = document.getElementById("editIndex");
     const nameInput = document.getElementById("name");
-    const relationInput = document.getElementById("relation");
-    const locationInput = document.getElementById("location");
-    const lastContactInput = document.getElementById("lastContact");
-    const tagsInput = document.getElementById("tags");
+    const phoneInput = document.getElementById("phone");
+    const placeInput = document.getElementById("place");
     const notesInput = document.getElementById("notes");
-    const cancelEditBtn = document.getElementById("cancelEditBtn");
     const saveBtn = document.getElementById("saveBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-    function renderList() {
-      const searchTerm = searchInput.value.trim().toLowerCase();
-      const sortBy = sortSelect.value;
+    const searchInput = document.getElementById("searchInput");
+    const classmateListEl = document.getElementById("classmateList");
+    const emptyListEl = document.getElementById("emptyList");
+    const summaryBadge = document.getElementById("summaryBadge");
 
-      let filtered = people.filter((p) => {
-        const haystack = [
-          p.name,
-          p.relation,
-          p.location,
-          p.tags,
-          p.notes,
-        ]
-          .filter(Boolean)
-          .join(" ")
-          .toLowerCase();
-        return haystack.includes(searchTerm);
+    const mapGrid = document.getElementById("mapGrid");
+    const mapStatus = document.getElementById("mapStatus");
+    const clearAllBtn = document.getElementById("clearAllBtn");
+    const demoBtn = document.getElementById("demoBtn");
+
+    const importBtn = document.getElementById("importBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const importFileInput = document.getElementById("importFile");
+
+    // ---------- INIT TOWN DROPDOWN ----------
+    function initTowns() {
+      townSelect.innerHTML = '<option value="">Select town…</option>';
+      TOWNS.forEach((t) => {
+        const opt = document.createElement("option");
+        opt.value = t;
+        opt.textContent = t;
+        townSelect.appendChild(opt);
       });
+    }
 
-      filtered.sort((a, b) => {
-        if (sortBy === "name") {
-          return a.name.localeCompare(b.name);
-        }
-        const da = a.lastContact ? new Date(a.lastContact) : null;
-        const db = b.lastContact ? new Date(b.lastContact) : null;
+    // ---------- RENDER CLASSMATE LIST ----------
+    function renderClassmateList() {
+      const term = searchInput.value.trim().toLowerCase();
 
-        if (!da && !db) return a.name.localeCompare(b.name);
-        if (!da) return sortBy === "lastContactRecent" ? 1 : -1;
-        if (!db) return sortBy === "lastContactRecent" ? -1 : 1;
-
-        if (sortBy === "lastContactRecent") {
-          return db - da;
-        } else {
-          return da - db;
-        }
-      });
-
-      peopleListEl.innerHTML = "";
-      countMetaEl.textContent =
-        filtered.length + (filtered.length === 1 ? " person" : " people");
-
-      if (filtered.length === 0) {
-        emptyStateEl.style.display = "block";
-        return;
-      } else {
-        emptyStateEl.style.display = "none";
+      let filtered = classmates;
+      if (selectedTown) {
+        filtered = filtered.filter((c) => c.town === selectedTown);
       }
 
-      filtered.forEach((p, index) => {
-        const div = document.createElement("div");
-        div.className = "person";
+      if (term) {
+        filtered = filtered.filter((c) => {
+          const haystack = [c.name, c.phone, c.town, c.place, c.notes]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+          return haystack.includes(term);
+        });
+      }
 
-        const days = daysSince(p.lastContact);
-        let contactLabel = "No contact date set";
-        let badgeClass = "";
-        if (days === null) {
-          contactLabel = "No contact date set";
-        } else if (days <= 30) {
-          contactLabel = `Spoken ${days} day${days === 1 ? "" : "s"} ago`;
-          badgeClass = "ok";
-        } else if (days <= 90) {
-          contactLabel = `Spoken ${days} days ago`;
-        } else {
-          contactLabel = `It's been ${days} days`;
-        }
+      classmateListEl.innerHTML = "";
+      summaryBadge.textContent =
+        classmates.length +
+        (classmates.length === 1 ? " classmate stored" : " classmates stored");
 
-        const showIndex = people.indexOf(p);
+      if (filtered.length === 0) {
+        emptyListEl.style.display = "block";
+        return;
+      } else {
+        emptyListEl.style.display = "none";
+      }
 
-        div.innerHTML = `
-          <div>
-            <div class="person-name">${p.name || "Unnamed"}</div>
-            <div class="person-relation">${p.relation || ""}</div>
-          </div>
-          <div>
-            ${
-              p.location
-                ? `<div class="person-location">${p.location}</div>`
-                : ""
-            }
+      filtered.forEach((c) => {
+        const item = document.createElement("div");
+        item.className = "classmate";
+
+        const indexInFull = classmates.indexOf(c);
+
+        item.innerHTML = `
+          <div class="classmate-header">
             <div>
-              ${
-                days === null
-                  ? `<span class="badge">No date</span>`
-                  : `<span class="badge ${badgeClass}">${contactLabel}</span>`
-              }
-              ${
-                p.lastContact
-                  ? `<span style="font-size:0.72rem;color:#6b7280;">(${p.lastContact})</span>`
-                  : ""
-              }
+              <div class="classmate-name">${c.name}</div>
+              <div class="classmate-town">${c.town || "No town set"}</div>
             </div>
+            <div class="classmate-phone">${c.phone}</div>
           </div>
-          <div>
-            ${
-              p.tags
-                ? p.tags
-                    .split(",")
-                    .map((t) => t.trim())
-                    .filter(Boolean)
-                    .map((t) => `<span class="tag">${t}</span>`)
-                    .join("")
-                : ""
-            }
-            ${
-              p.notes
-                ? `<div class="person-notes">${p.notes}</div>`
-                : ""
-            }
-            <div style="margin-top:0.3rem; font-size:0.75rem;">
-              <span class="danger" data-action="edit" data-index="${showIndex}">Edit</span>
-              &nbsp;•&nbsp;
-              <span class="danger" data-action="delete" data-index="${showIndex}">Delete</span>
-            </div>
+          ${
+            c.place
+              ? `<div class="classmate-detail">📍 ${c.place}</div>`
+              : ""
+          }
+          ${
+            c.notes
+              ? `<div class="classmate-detail">${c.notes}</div>`
+              : ""
+          }
+          <div style="margin-top:0.25rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button class="btn small secondary" data-action="edit" data-index="${indexInFull}">Edit</button>
+            <button class="btn small secondary" data-action="delete" data-index="${indexInFull}">Delete</button>
           </div>
         `;
 
-        peopleListEl.appendChild(div);
+        classmateListEl.appendChild(item);
       });
     }
 
-    peopleListEl.addEventListener("click", (e) => {
+    classmateListEl.addEventListener("click", (e) => {
       const target = e.target;
       if (!(target instanceof HTMLElement)) return;
-
       const action = target.getAttribute("data-action");
       const indexStr = target.getAttribute("data-index");
       if (!action || indexStr === null) return;
-
       const index = parseInt(indexStr, 10);
-      if (Number.isNaN(index) || index < 0 || index >= people.length) return;
+      if (Number.isNaN(index) || index < 0 || index >= classmates.length) return;
+
+      const c = classmates[index];
 
       if (action === "edit") {
-        const p = people[index];
         editIndexInput.value = index;
-        nameInput.value = p.name || "";
-        relationInput.value = p.relation || "";
-        locationInput.value = p.location || "";
-        lastContactInput.value = p.lastContact || "";
-        tagsInput.value = p.tags || "";
-        notesInput.value = p.notes || "";
-        saveBtn.textContent = "Update person";
+        nameInput.value = c.name;
+        phoneInput.value = c.phone;
+        townSelect.value = c.town || "";
+        placeInput.value = c.place || "";
+        notesInput.value = c.notes || "";
+        saveBtn.textContent = "Update classmate";
         cancelEditBtn.style.display = "inline-flex";
         nameInput.focus();
       } else if (action === "delete") {
-        if (confirm(`Delete ${people[index].name || "this person"}?`)) {
-          people.splice(index, 1);
-          savePeople(people);
-          renderList();
-          resetForm();
+        if (confirm(`Delete ${c.name}?`)) {
+          classmates.splice(index, 1);
+          saveClassmates(classmates);
+          renderClassmateList();
+          renderMap();
         }
       }
     });
 
     function resetForm() {
+      classmateForm.reset();
       editIndexInput.value = "";
-      form.reset();
-      saveBtn.textContent = "Save person";
+      saveBtn.textContent = "Save classmate";
       cancelEditBtn.style.display = "none";
     }
 
-    form.addEventListener("submit", (e) => {
+    // ---------- FORM SUBMIT ----------
+    classmateForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const person = {
+
+      const newC = {
         name: nameInput.value.trim(),
-        relation: relationInput.value.trim(),
-        location: locationInput.value.trim(),
-        lastContact: lastContactInput.value || "",
-        tags: tagsInput.value.trim(),
-        notes: notesInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        town: townSelect.value,
+        place: placeInput.value.trim(),
+        notes: notesInput.value.trim()
       };
 
-      if (!person.name) {
-        alert("Name is required.");
+      if (!newC.name || !newC.phone || !newC.town) {
+        alert("Name, phone and town are required.");
         return;
       }
 
       const editIndex = editIndexInput.value;
       if (editIndex !== "") {
         const idx = parseInt(editIndex, 10);
-        if (!Number.isNaN(idx) && idx >= 0 && idx < people.length) {
-          people[idx] = person;
+        if (!Number.isNaN(idx) && idx >= 0 && idx < classmates.length) {
+          classmates[idx] = newC;
         }
       } else {
-        people.push(person);
+        classmates.push(newC);
       }
 
-      savePeople(people);
-      renderList();
+      saveClassmates(classmates);
       resetForm();
+      renderClassmateList();
+      renderMap();
     });
 
     cancelEditBtn.addEventListener("click", () => {
       resetForm();
     });
 
-    searchInput.addEventListener("input", renderList);
-    sortSelect.addEventListener("change", renderList);
+    // ---------- MAP ----------
+    function renderMap() {
+      mapGrid.innerHTML = "";
 
-    resetDataBtn.addEventListener("click", () => {
-      if (confirm("This will delete ALL saved people in this browser. Continue?")) {
-        people = [];
-        savePeople(people);
-        renderList();
-        resetForm();
+      const counts = {};
+      classmates.forEach((c) => {
+        if (!c.town) return;
+        counts[c.town] = (counts[c.town] || 0) + 1;
+      });
+
+      TOWNS.forEach((town) => {
+        const count = counts[town] || 0;
+        const tile = document.createElement("button");
+        tile.type = "button";
+        tile.className = "town-tile";
+        if (count > 0) tile.classList.add("has-people");
+        if (selectedTown === town) tile.classList.add("selected");
+
+        tile.innerHTML = `
+          <span class="town-name">${town}</span>
+          <span class="town-count">${
+            count === 0 ? "No one here (yet)" :
+            count === 1 ? "1 classmate here" :
+            count + " classmates here"
+          }</span>
+        `;
+
+        tile.addEventListener("click", () => {
+          if (selectedTown === town) {
+            selectedTown = null;
+            mapStatus.textContent = "No town selected.";
+          } else {
+            selectedTown = town;
+            const num = counts[town] || 0;
+            mapStatus.textContent =
+              num === 0
+                ? `No classmates saved in ${town} yet.`
+                : `${num} classmate${num === 1 ? "" : "s"} in ${town} – listed on the left.`;
+          }
+          renderClassmateList();
+          renderMap();
+        });
+
+        mapGrid.appendChild(tile);
+      });
+    }
+
+    // ---------- CLEAR ALL ----------
+    clearAllBtn.addEventListener("click", () => {
+      if (
+        confirm(
+          "This will delete ALL saved classmates from this browser. Are you sure?"
+        )
+      ) {
+        classmates = [];
+        saveClassmates(classmates);
+        selectedTown = null;
+        mapStatus.textContent = "No town selected.";
+        renderClassmateList();
+        renderMap();
       }
     });
 
-    // Initial render
-    renderList();
+    // ---------- SEARCH ----------
+    searchInput.addEventListener("input", () => {
+      renderClassmateList();
+    });
+
+    // ---------- DEMO DATA ----------
+    demoBtn.addEventListener("click", () => {
+      if (
+        classmates.length > 0 &&
+        !confirm(
+          "Demo data will be added on top of your current list. Continue?"
+        )
+      ) {
+        return;
+      }
+
+      const demo = [
+        {
+          name: "Aisha Mwangi",
+          phone: "0712 345 678",
+          town: "Nairobi",
+          place: "South B – Golden Gate",
+          notes: "Wants to study medicine at UoN."
+        },
+        {
+          name: "Brian Otieno",
+          phone: "0722 111 222",
+          town: "Kisumu",
+          place: "Milimani",
+          notes: "Loves basketball and coding."
+        },
+        {
+          name: "Grace Wanjiru",
+          phone: "0790 555 444",
+          town: "Nakuru",
+          place: "Shabaab",
+          notes: "Gap year then uni."
+        },
+        {
+          name: "Kevin Kiptoo",
+          phone: "0700 000 999",
+          town: "Eldoret",
+          place: "Kapsoya",
+          notes: "Training for athletics."
+        },
+        {
+          name: "Fatma Ahmed",
+          phone: "0733 222 333",
+          town: "Mombasa",
+          place: "Nyali",
+          notes: "Into photography."
+        }
+      ];
+
+      classmates = classmates.concat(demo);
+      saveClassmates(classmates);
+      renderClassmateList();
+      renderMap();
+    });
+
+    // ---------- EXPORT ----------
+    exportBtn.addEventListener("click", () => {
+      if (classmates.length === 0) {
+        alert("No classmates to export yet.");
+        return;
+      }
+      try {
+        const dataStr = JSON.stringify(classmates, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "kinkonnect-classmates.json";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        alert("Could not export data.");
+      }
+    });
+
+    // ---------- IMPORT ----------
+    importBtn.addEventListener("click", () => {
+      importFileInput.click();
+    });
+
+    importFileInput.addEventListener("change", () => {
+      const file = importFileInput.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const text = event.target.result;
+          const imported = JSON.parse(text);
+          if (!Array.isArray(imported)) {
+            alert("Invalid file format. Expected a list of classmates.");
+            return;
+          }
+
+          if (
+            classmates.length > 0 &&
+            !confirm(
+              "This will REPLACE your current classmates with the imported list. Continue?"
+            )
+          ) {
+            return;
+          }
+
+          classmates = imported;
+          saveClassmates(classmates);
+          selectedTown = null;
+          mapStatus.textContent = "No town selected.";
+          renderClassmateList();
+          renderMap();
+          alert("Import successful!");
+        } catch (err) {
+          alert("Could not read that file. Make sure it's a Kinkonnect export.");
+        }
+      };
+
+      reader.readAsText(file);
+      importFileInput.value = "";
+    });
+
+    // ---------- INIT ----------
+    initTowns();
+    renderClassmateList();
+    renderMap();
   </script>
 </body>
 </html>
