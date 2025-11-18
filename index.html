@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Kinkonnect – Classmates Map</title>
+  <title>KinKonnect – Classmates Map</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -14,6 +14,8 @@
     body {
       margin: 0;
       padding: 0;
+      background: #0f172a;
+      color: #e5e7eb;
     }
 
     .app {
@@ -34,13 +36,7 @@
     .title {
       display: flex;
       flex-direction: column;
-      gap: 0.1rem;
-    }
-
-    h1 {
-      font-size: 1.8rem;
-      margin: 0;
-      color: #e5e7eb;
+      gap: 0.3rem;
     }
 
     .subtitle {
@@ -256,7 +252,6 @@
       padding: 0.8rem 0.4rem;
     }
 
-    /* Map tiles */
     .map-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -332,18 +327,130 @@
       font-size: 0.75rem;
       color: #6b7280;
     }
+
+    .about-list {
+      font-size: 0.85rem;
+      color: #d1d5db;
+      padding-left: 1.1rem;
+      margin: 0.35rem 0 0.6rem;
+    }
+
+    .about-list li {
+      margin-bottom: 0.2rem;
+    }
+
+    .small-muted {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    /* LIGHT THEME OVERRIDES */
+    body.theme-light {
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    body.theme-light .card {
+      background: #ffffff;
+      border-color: #e5e7eb;
+      box-shadow: 0 10px 25px rgba(148,163,184,0.35);
+    }
+
+    body.theme-light input[type="text"],
+    body.theme-light input[type="tel"],
+    body.theme-light select,
+    body.theme-light textarea {
+      background: #ffffff;
+      border-color: #d1d5db;
+      color: #111827;
+    }
+
+    body.theme-light input[type="text"]:focus,
+    body.theme-light input[type="tel"]:focus,
+    body.theme-light select:focus,
+    body.theme-light textarea:focus {
+      background: #ffffff;
+    }
+
+    body.theme-light .classmate {
+      background: #ffffff;
+      border-color: #e5e7eb;
+    }
+
+    body.theme-light .classmate.nearby {
+      border-color: #eab308;
+      box-shadow: 0 0 0 1px #eab308;
+    }
+
+    body.theme-light .town-tile {
+      background: #ffffff;
+      border-color: #e5e7eb;
+    }
+
+    body.theme-light .town-tile.has-people {
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      border-color: #16a34a;
+      box-shadow: 0 10px 25px rgba(74,222,128,0.6);
+    }
+
+    body.theme-light .town-tile.nearby-town {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border-color: #eab308;
+      box-shadow: 0 10px 25px rgba(250,204,21,0.6);
+    }
+
+    body.theme-light .card-title {
+      color: #111827;
+    }
+
+    body.theme-light .subtitle {
+      color: #4b5563;
+    }
+
+    body.theme-light .badge {
+      color: #6b7280;
+    }
+
+    body.theme-light .small-muted {
+      color: #6b7280;
+    }
+
+    body.theme-light .btn.secondary {
+      background: #f9fafb;
+      border-color: #d1d5db;
+      color: #111827;
+    }
+
+    body.theme-light .btn.secondary:hover {
+      background: #e5e7eb;
+    }
   </style>
 </head>
 <body>
   <div class="app">
     <header>
       <div class="title">
-        <h1>Kinkonnect</h1>
+        <!-- Logo (3 dots + KinKonnect) -->
+        <svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="10" r="3" fill="#22c55e"/>
+          <circle cx="55" cy="10" r="3" fill="#6366f1"/>
+          <circle cx="70" cy="10" r="3" fill="#facc15"/>
+          <text x="20" y="32" font-size="22" font-family="system-ui, sans-serif" fill="#e5e7eb" font-weight="600">
+            KinKonnect
+          </text>
+          <text x="22" y="44" font-size="10" font-family="system-ui, sans-serif" fill="#9ca3af">
+            Stay linked after school
+          </text>
+        </svg>
+
         <div class="subtitle">
           See where your classmates are across Kenya 🌍 – and who is near who.
         </div>
       </div>
-      <div>
+      <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+        <button id="themeToggle" class="btn small secondary" type="button">
+          Light mode
+        </button>
         <span class="pill">High school class of 100</span>
       </div>
     </header>
@@ -388,6 +495,15 @@
             <div>
               <label for="town">Town *</label>
               <select id="town" required></select>
+            </div>
+          </div>
+
+          <!-- Custom town input -->
+          <div style="margin-top:0.45rem;">
+            <label for="customTown">Town missing? Add it here:</label>
+            <div style="display:flex; gap:0.4rem;">
+              <input id="customTown" type="text" placeholder="Type town name..." />
+              <button type="button" class="btn small secondary" id="addTownBtn">Add town</button>
             </div>
           </div>
 
@@ -467,14 +583,70 @@
         </div>
       </section>
     </div>
+
+    <!-- ABOUT SECTION -->
+    <section class="card" style="margin-top:1.5rem;">
+      <div class="card-header">
+        <div>
+          <div class="card-title">About KinKonnect</div>
+          <div class="card-sub">A simple “where are they now?” map for a graduating class.</div>
+        </div>
+      </div>
+      <div style="font-size:0.88rem; color:#e5e7eb; line-height:1.5;">
+        <p>
+          KinKonnect is a small web app built to help a high school class of about 100 students
+          stay connected after graduation. Instead of losing touch, classmates can be added with:
+        </p>
+        <ul class="about-list">
+          <li><strong>Basic info</strong> – name, phone number, town, and a specific place (estate, school, street).</li>
+          <li><strong>Location on a map</strong> – optional latitude and longitude for more accurate proximity checks.</li>
+          <li><strong>Notes</strong> – for things like university, work, or other details.</li>
+        </ul>
+
+        <p>
+          On the right, towns across Kenya are shown as tiles. A town turns
+          <span style="color:#22c55e;">green</span> when there is at least one classmate there.
+          A town gets a warm <span style="color:#facc15;">yellow glow</span> when classmates in that town
+          have at least one other classmate within <strong>5 km</strong> of them (based on their coordinates).
+        </p>
+
+        <p>
+          The app also calculates, for each classmate with coordinates, how close they are to their nearest classmate.
+          If their nearest neighbour is within 5 km, their card is highlighted in yellow and shows a
+          “Nearest classmate: X km away” label. This makes it easy to see who could realistically meet up in person.
+        </p>
+
+        <p>
+          KinKonnect runs entirely in the browser using HTML, CSS and JavaScript. All data is stored locally using
+          <code>localStorage</code>, and can be backed up or restored using the Export and Import buttons. No external
+          server or database is required – it can be hosted as a static site (for example on GitHub Pages).
+        </p>
+
+        <p>
+          The town list starts with common towns in Kenya, but anyone can type a missing town name and add it to
+          the map. This keeps the app flexible for smaller or less well-known places.
+        </p>
+
+        <p class="small-muted">
+          KinKonnect is not a live tracking tool. Locations are only as accurate and as up-to-date as what
+          classmates choose to enter. It is designed as a friendly way to visualise where everyone ended up,
+          and to make it easier to reconnect when people are in the same area.
+        </p>
+
+        <p class="small-muted" style="margin-top:0.5rem;">
+          Made by <strong>Kathy Kemunto</strong> and <strong>Sandra Njeri</strong>, Class of 2026.
+        </p>
+      </div>
+    </section>
   </div>
 
   <script>
     // ---------- CONFIG ----------
     const STORAGE_KEY = "kinkonnect-classmates-v1";
+    const TOWNS_KEY = "kinkonnect-towns-v1";
+    const THEME_KEY = "kinkonnect-theme-v1";
 
-    // A list of Kenyan towns – you can edit this
-    const TOWNS = [
+    const BASE_TOWNS = [
       "Nairobi", "Mombasa", "Kisumu", "Nakuru", "Eldoret", "Thika", "Nyeri",
       "Meru", "Embu", "Kericho", "Naivasha", "Kitale", "Kakamega", "Bungoma",
       "Machakos", "Kajiado", "Narok", "Lamu", "Garissa", "Wajir", "Isiolo",
@@ -485,7 +657,8 @@
       "Chuka", "Kapsabet"
     ];
 
-    // ---------- HELPERS ----------
+    let TOWNS = [];
+
     function loadClassmates() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -501,7 +674,34 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
     }
 
-    // Haversine distance in km between two coords
+    function loadTowns() {
+      try {
+        const raw = localStorage.getItem(TOWNS_KEY);
+        if (!raw) return [...BASE_TOWNS];
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [...BASE_TOWNS];
+        const cleaned = parsed
+          .map((t) => (typeof t === "string" ? t.trim() : ""))
+          .filter((t) => t.length > 0);
+        return cleaned.length ? cleaned : [...BASE_TOWNS];
+      } catch {
+        return [...BASE_TOWNS];
+      }
+    }
+
+    function saveTowns(list) {
+      localStorage.setItem(TOWNS_KEY, JSON.stringify(list));
+    }
+
+    function toTitleCase(s) {
+      return s
+        .toLowerCase()
+        .split(" ")
+        .filter((p) => p.length > 0)
+        .map((p) => p[0].toUpperCase() + p.slice(1))
+        .join(" ");
+    }
+
     function distanceKm(lat1, lon1, lat2, lon2) {
       const R = 6371;
       const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -516,13 +716,10 @@
       return R * c;
     }
 
-    // Compute nearest distance to any other classmate (pairwise)
     function computeProximity() {
       const n = classmates.length;
       const prox = new Array(n);
-      for (let i = 0; i < n; i++) {
-        prox[i] = { nearestKm: null };
-      }
+      for (let i = 0; i < n; i++) prox[i] = { nearestKm: null };
 
       for (let i = 0; i < n; i++) {
         const ci = classmates[i];
@@ -541,23 +738,22 @@
           const d = distanceKm(lat1, lng1, lat2, lng2);
           if (!Number.isFinite(d)) continue;
 
-          if (prox[i].nearestKm === null || d < prox[i].nearestKm) {
+          if (prox[i].nearestKm === null || d < prox[i].nearestKm)
             prox[i].nearestKm = d;
-          }
-          if (prox[j].nearestKm === null || d < prox[j].nearestKm) {
+          if (prox[j].nearestKm === null || d < prox[j].nearestKm)
             prox[j].nearestKm = d;
-          }
         }
       }
       return prox;
     }
 
-    // ---------- STATE ----------
     let classmates = loadClassmates();
     let selectedTown = null;
 
-    // ---------- ELEMENTS ----------
     const townSelect = document.getElementById("town");
+    const customTownInput = document.getElementById("customTown");
+    const addTownBtn = document.getElementById("addTownBtn");
+
     const classmateForm = document.getElementById("classmateForm");
     const editIndexInput = document.getElementById("editIndex");
     const nameInput = document.getElementById("name");
@@ -583,10 +779,33 @@
     const exportBtn = document.getElementById("exportBtn");
     const importFileInput = document.getElementById("importFile");
 
-    // ---------- INIT TOWN DROPDOWN ----------
-    function initTowns() {
+    const themeToggleBtn = document.getElementById("themeToggle");
+    const bodyEl = document.body;
+
+    function applyTheme(theme) {
+      if (theme === "light") {
+        bodyEl.classList.add("theme-light");
+        themeToggleBtn.textContent = "Dark mode";
+      } else {
+        bodyEl.classList.remove("theme-light");
+        themeToggleBtn.textContent = "Light mode";
+      }
+      localStorage.setItem(THEME_KEY, theme);
+    }
+
+    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+    applyTheme(savedTheme);
+
+    themeToggleBtn.addEventListener("click", () => {
+      const current = bodyEl.classList.contains("theme-light") ? "light" : "dark";
+      const next = current === "light" ? "dark" : "light";
+      applyTheme(next);
+    });
+
+    function initTownsDropdown() {
       townSelect.innerHTML = '<option value="">Select town…</option>';
-      TOWNS.forEach((t) => {
+      const sorted = [...TOWNS].sort((a, b) => a.localeCompare(b));
+      sorted.forEach((t) => {
         const opt = document.createElement("option");
         opt.value = t;
         opt.textContent = t;
@@ -594,7 +813,28 @@
       });
     }
 
-    // ---------- RENDER CLASSMATE LIST ----------
+    addTownBtn.addEventListener("click", () => {
+      const raw = customTownInput.value.trim();
+      if (!raw) {
+        alert("Please type a town name first.");
+        return;
+      }
+      const formatted = toTitleCase(raw);
+      if (TOWNS.includes(formatted)) {
+        alert("That town is already in the list.");
+        townSelect.value = formatted;
+        customTownInput.value = "";
+        return;
+      }
+      TOWNS.push(formatted);
+      saveTowns(TOWNS);
+      initTownsDropdown();
+      townSelect.value = formatted;
+      customTownInput.value = "";
+      renderMap();
+      alert(`Added "${formatted}" to the town list.`);
+    });
+
     function renderClassmateList() {
       const term = searchInput.value.trim().toLowerCase();
       const proximity = computeProximity();
@@ -651,21 +891,9 @@
             </div>
             <div class="classmate-phone">${c.phone}</div>
           </div>
-          ${
-            c.place
-              ? `<div class="classmate-detail">📍 ${c.place}</div>`
-              : ""
-          }
-          ${
-            distanceText
-              ? `<div class="classmate-detail">📏 ${distanceText}</div>`
-              : ""
-          }
-          ${
-            c.notes
-              ? `<div class="classmate-detail">${c.notes}</div>`
-              : ""
-          }
+          ${c.place ? `<div class="classmate-detail">📍 ${c.place}</div>` : ""}
+          ${distanceText ? `<div class="classmate-detail">📏 ${distanceText}</div>` : ""}
+          ${c.notes ? `<div class="classmate-detail">${c.notes}</div>` : ""}
           <div style="margin-top:0.25rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
             <button class="btn small secondary" data-action="edit" data-index="${indexInFull}">Edit</button>
             <button class="btn small secondary" data-action="delete" data-index="${indexInFull}">Delete</button>
@@ -718,7 +946,6 @@
       cancelEditBtn.style.display = "none";
     }
 
-    // ---------- FORM SUBMIT ----------
     classmateForm.addEventListener("submit", (e) => {
       e.preventDefault();
 
@@ -726,10 +953,8 @@
       const lngVal = lngInput.value.trim();
       const latNum = parseFloat(latVal);
       const lngNum = parseFloat(lngVal);
-      const lat =
-        latVal && Number.isFinite(latNum) ? latNum : null;
-      const lng =
-        lngVal && Number.isFinite(lngNum) ? lngNum : null;
+      const lat = latVal && Number.isFinite(latNum) ? latNum : null;
+      const lng = lngVal && Number.isFinite(lngNum) ? lngNum : null;
 
       const newC = {
         name: nameInput.value.trim(),
@@ -766,7 +991,6 @@
       resetForm();
     });
 
-    // ---------- MAP ----------
     function renderMap() {
       mapGrid.innerHTML = "";
 
@@ -788,7 +1012,9 @@
         }
       });
 
-      TOWNS.forEach((town) => {
+      const sortedTowns = [...TOWNS].sort((a, b) => a.localeCompare(b));
+
+      sortedTowns.forEach((town) => {
         const count = counts[town] || 0;
         const nearbyCount = nearbyCounts[town] || 0;
         const tile = document.createElement("button");
@@ -835,11 +1061,10 @@
       });
     }
 
-    // ---------- CLEAR ALL ----------
     clearAllBtn.addEventListener("click", () => {
       if (
         confirm(
-          "This will delete ALL saved classmates from this browser. Are you sure?"
+          "This will delete ALL saved classmates from this browser. Custom towns will stay. Continue?"
         )
       ) {
         classmates = [];
@@ -852,12 +1077,10 @@
       }
     });
 
-    // ---------- SEARCH ----------
     searchInput.addEventListener("input", () => {
       renderClassmateList();
     });
 
-    // ---------- DEMO DATA ----------
     demoBtn.addEventListener("click", () => {
       if (
         classmates.length > 0 &&
@@ -922,7 +1145,6 @@
       renderMap();
     });
 
-    // ---------- EXPORT ----------
     exportBtn.addEventListener("click", () => {
       if (classmates.length === 0) {
         alert("No classmates to export yet.");
@@ -944,7 +1166,6 @@
       }
     });
 
-    // ---------- IMPORT ----------
     importBtn.addEventListener("click", () => {
       importFileInput.click();
     });
@@ -981,7 +1202,7 @@
           renderMap();
           alert("Import successful!");
         } catch (err) {
-          alert("Could not read that file. Make sure it's a Kinkonnect export.");
+          alert("Could not read that file. Make sure it's a KinKonnect export.");
         }
       };
 
@@ -989,8 +1210,8 @@
       importFileInput.value = "";
     });
 
-    // ---------- INIT ----------
-    initTowns();
+    TOWNS = loadTowns();
+    initTownsDropdown();
     renderClassmateList();
     renderMap();
   </script>
